@@ -1,5 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const path = require("path");
+
+const bookRoutes = require('./routes/books');
 
 const app = express();
 const PORT = 5000;
@@ -14,10 +17,17 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use(express.json());
 
-// Ruta de test (FOARTE IMPORTANTĂ)
-app.get('/', (req, res) => {
+app.use(express.static(path.join(__dirname, '..', '..', 'client')));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "..", "client", "index.html"));
+});
+
+app.get('/api', (req, res) => {
   res.json({ message: 'API is running' });
 });
+
+app.use('/books', bookRoutes);
 
 // Start server
 app.listen(PORT, () => {
