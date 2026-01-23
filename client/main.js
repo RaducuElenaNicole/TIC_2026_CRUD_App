@@ -41,7 +41,7 @@ function boot() {
 }
 
 // =======================
-// authentification -> register & login
+// authentication -> register & login
 // =======================
 
 // register
