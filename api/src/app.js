@@ -3,6 +3,7 @@ const cors = require('cors');
 const path = require("path");
 
 const bookRoutes = require('./routes/books');
+const authRoutes = require("./routes/auth");
 
 const app = express();
 const PORT = 5000;
@@ -28,6 +29,7 @@ app.get('/api', (req, res) => {
 });
 
 app.use('/books', bookRoutes);
+app.use("/auth", authRoutes);
 
 // Start server
 app.listen(PORT, () => {

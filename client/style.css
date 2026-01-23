@@ -1,3 +1,108 @@
+/* =========================
+   AUTHENTIFICATION SECTION -> stylish
+   ========================= */
+#auth-section,
+#user-info {
+  max-width: 900px;
+  margin: 20px auto 0 auto;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+#auth-section h2 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+}
+
+#auth-section > div {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+#auth-section input {
+  padding: 10px 12px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+}
+
+#auth-section input:focus {
+  border-color: #999;
+}
+
+#login-button,
+#register-button,
+#logout-button {
+  padding: 10px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #333;
+  background: #333;
+  color: #fff;
+  border-radius: 6px;
+}
+
+#login-button:hover,
+#register-button:hover,
+#logout-button:hover {
+  opacity: 0.9;
+}
+
+#auth-message {
+  margin: 8px 0 0 0;
+  font-size: 14px;
+}
+
+#user-info p {
+  margin: 0 0 10px 0;
+}
+
+#user-info hr {
+  margin: 14px 0 0 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+@media (min-width: 700px) {
+  #auth-section > div:first-of-type {
+    grid-template-columns: 1fr 1fr;
+  }
+  #login-button {
+    grid-column: 1 / -1;
+    width: fit-content;
+  }
+
+  #auth-section > div:last-of-type {
+    grid-template-columns: 1fr 1fr;
+  }
+  #register-button {
+    grid-column: 1 / -1;
+    width: fit-content;
+  }
+}
+
+/* topbar for logged-in page */
+#topbar {
+  max-width: 900px;
+  margin: 20px auto 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
+}
+
+#topbar #logout-button {
+  margin-bottom: 0;
+}
+
+#topbar h1 {
+  margin: 0;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
