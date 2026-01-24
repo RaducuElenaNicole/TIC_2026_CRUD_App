@@ -1,6 +1,36 @@
 /* =========================
+   style baza
+   ========================= */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin-bottom: 16px;
+}
+
+button {
+  padding: 10px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+
+.hidden {
+  display: none;
+}
+
+.status {
+  margin-top: 12px;
+  color: #666;
+}
+
+/* =========================
    AUTHENTIFICATION SECTION -> stylish
    ========================= */
+
 #auth-section,
 #user-info {
   max-width: 900px;
@@ -66,26 +96,9 @@
   border: none;
   border-top: 1px solid #ddd;
 }
-
-@media (min-width: 700px) {
-  #auth-section > div:first-of-type {
-    grid-template-columns: 1fr 1fr;
-  }
-  #login-button {
-    grid-column: 1 / -1;
-    width: fit-content;
-  }
-
-  #auth-section > div:last-of-type {
-    grid-template-columns: 1fr 1fr;
-  }
-  #register-button {
-    grid-column: 1 / -1;
-    width: fit-content;
-  }
-}
-
-/* topbar for logged-in page */
+/* =========================
+   TOPBAR
+   ========================= */
 #topbar {
   max-width: 900px;
   margin: 20px auto 0 auto;
@@ -95,47 +108,39 @@
   justify-content: space-between;
 }
 
-#topbar #logout-button {
-  margin-bottom: 0;
-}
-
 #topbar h1 {
   margin: 0;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+#topbar #logout-button {
+  margin-bottom: 0;
 }
 
+/* =========================
+   LAYOUT / CONTAINER
+   ========================= */
 .container {
   max-width: 900px;
   margin: 40px auto;
   padding: 0 16px;
 }
 
-h1 {
-  margin-bottom: 16px;
-}
-
-button {
-  padding: 10px 16px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 16px;
-}
-
+/* =========================
+   tabel carti afisare 
+   ========================= */
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-table, th, td {
+table,
+th,
+td {
   border: 1px solid #ccc;
 }
 
-th, td {
+th,
+td {
   padding: 10px;
   text-align: left;
 }
@@ -144,11 +149,47 @@ th {
   background-color: #f4f4f4;
 }
 
-.hidden {
-  display: none;
+/* =========================
+   formular carte 
+   ========================= */
+#bookForm {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  display: grid;
+  gap: 10px;
+  max-width: 420px;
 }
 
-.status {
-  margin-top: 12px;
-  color: #666;
+#bookForm input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#bookForm button {
+  padding: 10px;
+  cursor: pointer;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+@media (min-width: 700px) {
+  #auth-section > div:first-of-type {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #login-button {
+    grid-column: 1 / -1;
+    width: fit-content;
+  }
+
+  #auth-section > div:last-of-type {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  #register-button {
+    grid-column: 1 / -1;
+    width: fit-content;
+  }
 }

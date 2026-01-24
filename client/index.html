@@ -42,7 +42,20 @@
 
     <div class="container">
     <button id="loadBooksBtn">Afișează cărțile</button>
+    <button id="addBookBtn">Adaugă carte</button>
 
+    <!-- formular pentru adaugarea unei carti noi -->
+    <form id="bookForm" class="hidden">
+      <input type="text" id="book-title" placeholder="Titlu" required />
+      <input type="text" id="book-author" placeholder="Autor" required />
+      <input type="number" id="book-year" placeholder="An apariție" required />
+      <input type="number" id="book-pages" placeholder="Pagini" required />
+
+      <button type="submit">Salvează</button>
+      <button type="button" id="cancelBookBtn">Renunță</button>
+    </form>
+
+    <!-- afisare carti -> sub forma de tabel -->
     <table id="booksTable" class="hidden">
       <thead>
         <tr>

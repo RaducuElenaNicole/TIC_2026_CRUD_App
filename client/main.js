@@ -182,3 +182,73 @@ async function loadBooks() {
 }
 
 if (button) button.addEventListener("click", loadBooks);
+
+// =======================
+// adaugare carte  
+// =======================
+
+// formular adaugare carte 
+const addBookBtn = document.getElementById("addBookBtn");
+const bookForm = document.getElementById("bookForm");
+const cancelBookBtn = document.getElementById("cancelBookBtn");
+
+function openBookForm() {
+  if (!bookForm) return;
+  bookForm.classList.remove("hidden");
+}
+
+function closeBookForm() {
+  if (!bookForm) return;
+  bookForm.classList.add("hidden");
+  bookForm.reset();
+}
+
+// asigurare ca formularul de introducere a unei carti este ascuns 
+closeBookForm();
+
+if (addBookBtn) addBookBtn.addEventListener("click", openBookForm);
+if (cancelBookBtn) cancelBookBtn.addEventListener("click", closeBookForm);
+
+// salvare carte introdusa 
+const titleInput = document.getElementById("book-title");
+const authorInput = document.getElementById("book-author");
+const yearInput = document.getElementById("book-year");
+const pagesInput = document.getElementById("book-pages");
+
+if (bookForm) {
+  bookForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    statusEl.textContent = "";
+
+    const payload = {
+      title: titleInput.value.trim(),
+      author: authorInput.value.trim(),
+      year: Number(yearInput.value),
+      pages: Number(pagesInput.value),
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/books`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        statusEl.textContent = data.error || "Eroare la salvarea cartii.";
+        return;
+      }
+
+      statusEl.textContent = "Cartea a fost salvata!";
+      closeBookForm();
+
+      // reincarca lista (si arata tabelul)
+      await loadBooks();
+    } catch (err) {
+      statusEl.textContent = "Eroare de retea / server oprit.";
+    }
+  });
+}
