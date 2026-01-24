@@ -19,6 +19,24 @@ function showLibraryPage() {
   authSection.style.display = "none";
   libraryPage.style.display = "block";
   showMessage("");
+
+  const form = document.getElementById("bookForm"); 
+  if(form){
+    form.style.display = "none";
+    form.reset();
+  }
+
+  const booksTableVisibility = document.getElementById("booksTable");
+  if(booksTableVisibility)
+    booksTableVisibility.classList.add("hidden"); 
+
+  const status = document.getElementById("status");
+  if(status)
+    status.textContent = "";
+
+  const body = document.querySelector("#booksTable tbody");
+  if(body)
+    body.innerHTML = "";
 }
 
 function saveAuth(token, email) {
@@ -34,9 +52,13 @@ function clearAuth() {
 // verific daca user s-a conectat (daca e logat in app)
 function boot() {
   const token = localStorage.getItem("token");
-  if (token) 
+  if (token) {
     showLibraryPage(); // daca userul e conectat => se deschide pagina librariei 
-  else 
+
+    const form = document.getElementById("bookForm");
+    if(form)
+      form.classList.add("hidden");
+  }else 
     showLoginPage(); // daca userul NU e conectat => se deschide DOAR pagina pentru autentificare
 }
 
@@ -181,7 +203,11 @@ async function loadBooks() {
   }
 }
 
-if (button) button.addEventListener("click", loadBooks);
+if (button) 
+  button.addEventListener("click", () =>{
+      closeBookForm();
+      loadBooks();
+  });
 
 // =======================
 // adaugare carte  
@@ -193,13 +219,23 @@ const bookForm = document.getElementById("bookForm");
 const cancelBookBtn = document.getElementById("cancelBookBtn");
 
 function openBookForm() {
-  if (!bookForm) return;
-  bookForm.classList.remove("hidden");
+  if (!bookForm) 
+    return;
+
+  // tabelul de afisare a cartilor vreau sa apara doar la apasarea butonului => ascund tabelul 
+  if(table)
+    table.classList.add("hidden");
+
+  if (statusEl) 
+    statusEl.textContent = "";
+
+  bookForm.style.display = "grid";
 }
 
 function closeBookForm() {
   if (!bookForm) return;
-  bookForm.classList.add("hidden");
+  //bookForm.classList.add("hidden");
+  bookForm.style.display = "none";
   bookForm.reset();
 }
 
@@ -242,11 +278,18 @@ if (bookForm) {
         return;
       }
 
-      statusEl.textContent = "Cartea a fost salvata!";
+      //statusEl.textContent = "Cartea a fost salvata!"; // se suprascrie
+      statusEl.innerHTML = `
+          <b>Cartea a fost adăugată!</b><br/>
+          Titlu: ${data.title}<br/>
+          Autor: ${data.author}<br/>
+          An apariție: ${data.year}<br/>
+          Pagini: ${data.pages}`;
+
       closeBookForm();
 
-      // reincarca lista (si arata tabelul)
-      await loadBooks();
+      table.classList.add("hidden");
+
     } catch (err) {
       statusEl.textContent = "Eroare de retea / server oprit.";
     }
