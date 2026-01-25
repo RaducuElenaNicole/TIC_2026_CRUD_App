@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CRUD App - Library</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="main.js" defer></script>
+  <script type="module"src="main.js"></script>
 </head>
 <body>
 
@@ -42,6 +42,13 @@
     <button id="addBookBtn">Adaugă carte</button>
     <button id="editBookBtn">Editează carte</button>
 
+    <!-- modificare carte -->
+    <div id="editPanel" class="hidden">
+      <select id="editBookSelect">
+        <option value="">-- Alege o carte din cele existe --</option>
+      </select>
+    </div>
+
     <!-- formular pentru adaugarea unei carti noi -->
     <form id="bookForm" class="hidden">
       <input type="text" id="book-title" placeholder="Titlu" required />
@@ -53,6 +60,8 @@
       <button type="button" id="cancelBookBtn">Renunță</button>
     </form>
 
+    <button id="saveEditBtn" class="hidden" type="button">Salveaza modificarile</button>
+    
     <!-- afisare carti -> sub forma de tabel -->
     <table id="booksTable" class="hidden">
       <thead>
@@ -65,13 +74,6 @@
       </thead>
       <tbody></tbody>
     </table>
-
-    <div id="editPanel" class="hidden">
-      <select id="editBookSelect">
-        <option value="">-- Alege o carte din cele existe --</option>
-      </select>
-      <button id="saveEditBtn" class="hidden" type="button">Salveaza modificarile</button>
-    </div>
 
     <p id="status" class="status"></p>
   </div>
