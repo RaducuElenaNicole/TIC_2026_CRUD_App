@@ -212,7 +212,6 @@ if (button)
 // =======================
 // adaugare carte  
 // =======================
-
 // formular adaugare carte 
 const addBookBtn = document.getElementById("addBookBtn");
 const bookForm = document.getElementById("bookForm");
@@ -242,8 +241,10 @@ function closeBookForm() {
 // asigurare ca formularul de introducere a unei carti este ascuns 
 closeBookForm();
 
-if (addBookBtn) addBookBtn.addEventListener("click", openBookForm);
-if (cancelBookBtn) cancelBookBtn.addEventListener("click", closeBookForm);
+if (addBookBtn) 
+  addBookBtn.addEventListener("click", openBookForm);
+if (cancelBookBtn) 
+  cancelBookBtn.addEventListener("click", closeBookForm);
 
 // salvare carte introdusa 
 const titleInput = document.getElementById("book-title");
@@ -292,6 +293,136 @@ if (bookForm) {
 
     } catch (err) {
       statusEl.textContent = "Eroare de retea / server oprit.";
+    }
+  });
+}
+
+// =======================
+// editare (actualizare) carte -> UPDATE  
+// =======================
+const editBookBtn = document.getElementById("editBookBtn");
+const editPanel = document.getElementById("editPanel");
+const editBookSelect = document.getElementById("editBookSelect");
+const saveEditBtn = document.getElementById("saveEditBtn");
+let editBookId = null;
+let cachedBooks = [];
+
+async function loadBooksForDropdown() {
+  try {
+    statusEl.textContent = "Se încarcă titlurile...";
+
+    const res = await fetch(`${API_BASE}/books`);
+    const books = await res.json();
+
+    if (!res.ok) {
+      statusEl.textContent = books.error || "Eroare la încărcarea cărților.";
+      return;
+    }
+
+    cachedBooks = Array.isArray(books) ? books : [];
+
+    editBookSelect.innerHTML = `<option value="">-- Alege o carte --</option>`;
+
+    if (cachedBooks.length === 0) {
+      statusEl.textContent = "Nu există cărți de editat.";
+      return;
+    }
+
+    cachedBooks.forEach((b) => {
+      const opt = document.createElement("option");
+      opt.value = b.id;                 
+      opt.textContent = b.title || "(fără titlu)";
+      editBookSelect.appendChild(opt);
+    });
+
+    statusEl.textContent = "Alege o carte din urmatoare.";
+  } catch (e) {
+    statusEl.textContent = "Eroare de rețea / server oprit.";
+  }
+}
+
+if (editBookBtn) {
+  editBookBtn.addEventListener("click", () => {
+    editPanel.classList.remove("hidden");
+    loadBooksForDropdown();
+  });
+}
+
+if (editBookSelect) {
+  editBookSelect.addEventListener("change", () => {
+    const id = editBookSelect.value;
+    if (!id) {
+      editBookId = null;
+      if (saveEditBtn) saveEditBtn.classList.add("hidden");
+      return;
+    }
+
+    editBookId = id;
+
+    const book = cachedBooks.find(b => b.id === id);
+    if (!book) {
+      statusEl.textContent = "Cartea selectată nu a fost găsită.";
+      return;
+    }
+
+    // prefill in formular (dupa selectarea cartii de user)
+    titleInput.value = book.title || "";
+    authorInput.value = book.author || "";
+    yearInput.value = book.year ?? "";
+    pagesInput.value = book.pages ?? "";
+
+    openBookForm();
+
+    if (saveEditBtn) 
+      saveEditBtn.classList.remove("hidden");
+
+    statusEl.textContent = `Editezi: ${book.title}`;
+  });
+}
+
+if (saveEditBtn) {
+  saveEditBtn.addEventListener("click", async () => {
+    if (!editBookId) {
+      statusEl.textContent = "Alege mai întâi o carte din dropdown.";
+      return;
+    }
+
+    statusEl.textContent = "";
+
+    const payload = {
+      title: titleInput.value.trim(),
+      author: authorInput.value.trim(),
+      year: Number(yearInput.value),
+      pages: Number(pagesInput.value),
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/books/${editBookId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        statusEl.textContent = data.error || "Eroare la actualizare.";
+        return;
+      }
+
+      statusEl.innerHTML = `
+        <b>Cartea a fost actualizată!</b><br/>
+        Titlu: ${data.title}<br/>
+        Autor: ${data.author}<br/>
+        An apariție: ${data.year}<br/>
+        Pagini: ${data.pages}`;
+
+      editBookSelect.value = "";
+      editBookId = null;
+      saveEditBtn.classList.add("hidden");
+      closeBookForm();
+    } catch (e) {
+      statusEl.textContent = "Eroare de rețea / server oprit.";
     }
   });
 }

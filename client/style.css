@@ -172,6 +172,22 @@ th {
 }
 
 /* =========================
+   editare carte - dropdown
+   ========================= */
+#editPanel {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  max-width: 420px;
+}
+
+#editBookSelect {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* =========================
    RESPONSIVE
    ========================= */
 @media (min-width: 700px) {

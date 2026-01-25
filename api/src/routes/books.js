@@ -20,8 +20,18 @@ router.get('/', async (req, res) => {
 });
 
 // GET /books/:id
-router.get('/:id', (req, res) => {
-  res.json({ id: req.params.id, title: 'Test Book' });
+router.get("/:id", async (req, res) => {
+  try {
+    const ref = db.collection("books").doc(req.params.id);
+    const snap = await ref.get();
+
+    if (!snap.exists) {
+      return res.status(404).json({ error: "Cartea nu exista" });
+    }
+    return res.json({ id: snap.id, ...snap.data() });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 });
 
 // POST /books
@@ -50,12 +60,31 @@ router.post("/", async (req, res) => {
 });
 
 // PUT /books/:id
-router.put('/:id', (req, res) => {
-  res.json({
-    message: 'Book updated',
-    id: req.params.id,
-    data: req.body
-  });
+router.put("/:id", async (req, res) => {
+  try {
+    const { title, author, year, pages } = req.body;
+
+    if (!title || !author || year == undefined || pages == undefined) {
+      return res.status(400).json({ error: "EROARE! Unul dintre campuri nu a fost completat!" });
+    }
+
+    const ref = db.collection("books").doc(req.params.id);
+    const snap = await ref.get();
+
+    if (!snap.exists) {
+      return res.status(404).json({ error: "Cartea nu exista" });
+    }
+
+    await ref.update({
+      title, author, year, pages, updatedAt: new Date(),
+    });
+
+    const updated = await ref.get();
+    return res.json({ id: updated.id, ...updated.data() });
+    
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 });
 
 // DELETE /books/:id

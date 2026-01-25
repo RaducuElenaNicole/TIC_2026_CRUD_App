@@ -18,7 +18,6 @@
     <input type="password" id="login-password" placeholder="Password">
     <button id="login-button">Login</button>
   </div>
-
   <h2>Register</h2>
   <div>
     <input type="text" id="register-firstName" placeholder="First name">
@@ -27,22 +26,21 @@
     <input type="password" id="register-password" placeholder="Password (min 8 chars)">
     <button id="register-button">Register</button>
   </div>
-
   <p id="auth-message" style="color: red;"></p>
 </div>
 
-  <!-- Pagina cu cartile -->
-  <div id="library-page" style="display:none;" >
-     <!-- buton logout-->
-    <div id="topbar">
-       <h1>CRUD App - Library</h1>
-      <button id="logout-button">Logout</button>
-    </div>
-
-
-    <div class="container">
+  <!-- Pagina librariei -->
+<div id="library-page" style="display:none;" >
+  <!-- titlu + buton logout-->
+  <div id="topbar">
+     <h1>CRUD App - Library</h1>
+    <button id="logout-button">Logout</button>
+  </div>
+  <!-- componentele propriu-zise -->
+  <div class="container">
     <button id="loadBooksBtn">Afișează cărțile</button>
     <button id="addBookBtn">Adaugă carte</button>
+    <button id="editBookBtn">Editează carte</button>
 
     <!-- formular pentru adaugarea unei carti noi -->
     <form id="bookForm" class="hidden">
@@ -68,9 +66,16 @@
       <tbody></tbody>
     </table>
 
-    <p id="status" class="status"></p>
+    <div id="editPanel" class="hidden">
+      <select id="editBookSelect">
+        <option value="">-- Alege o carte din cele existe --</option>
+      </select>
+      <button id="saveEditBtn" class="hidden" type="button">Salveaza modificarile</button>
     </div>
 
+    <p id="status" class="status"></p>
   </div>
+
+</div>
 </body>
 </html>
