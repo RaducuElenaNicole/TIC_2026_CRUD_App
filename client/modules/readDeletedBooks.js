@@ -24,16 +24,30 @@ export function initReadDeletedBooks(API_BASE, ui, uiRefs) {
   }
 
   async function loadDeletedBooks() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        statusEl.textContent = "Nu esti logat. Fa login ca sa vezi cartile sterse.";
+        return;
+    }
+
     ui.setView("deleted", uiRefs);
     if (statusEl) statusEl.textContent = "Se încarcă cărțile șterse...";
     clearTable();
 
     try {
-      const res = await fetch(`${API_BASE}/books/deleted`);
+      const res = await fetch(`${API_BASE}/books/deleted`, {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+      });
       const books = await res.json();
 
       if (!res.ok) {
-        if (statusEl) statusEl.textContent = books.error || "Eroare la încărcare.";
+        if (res.status === 401 || res.status === 403) {
+            statusEl.textContent = "Nu ai acces. Te rog fa login din nou.";
+        } else {
+            statusEl.textContent = books.error || "Eroare la încărcare.";
+        }
         return;
       }
 

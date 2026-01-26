@@ -61,9 +61,18 @@ export function initCreateBook(API_BASE, ui, uiRefs) {
       };
 
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            statusEl.textContent = "Nu esti logat. Fa login ca sa poti adauga o carte.";
+            return;
+        }
+
         const res = await fetch(`${API_BASE}/books`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json", 
+            "Authorization": `Bearer ${token}`,
+          },
           body: JSON.stringify(payload),
         });
 

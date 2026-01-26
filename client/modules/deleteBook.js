@@ -72,10 +72,19 @@ export function initDeleteBook(API_BASE, ui, uiRefs) {
       if (!selectedBook) return;
 
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            statusEl.textContent = "Nu esti logat. Fa login ca sa poti sterge.";
+            return;
+        }
+
         const res = await fetch(
-          `${API_BASE}/books/${selectedBook.id}`,
-          { method: "DELETE" }
-        );
+          `${API_BASE}/books/${selectedBook.id}`, {
+            method: "DELETE", 
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+           });
 
         const data = await res.json();
 

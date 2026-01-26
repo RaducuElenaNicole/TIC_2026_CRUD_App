@@ -117,9 +117,17 @@ export function initUpdateBook(API_BASE, createBookRefs, ui, uiRefs) {
       };
 
       try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+              statusEl.textContent = "Nu esti logat. Fa login ca sa poti edita.";
+              return;
+        }
+
         const res = await fetch(`${API_BASE}/books/${editBookId}`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: { 
+            "Content-Type": "application/json", 
+            "Authorization": `Bearer ${token}`},
           body: JSON.stringify(payload),
         });
 

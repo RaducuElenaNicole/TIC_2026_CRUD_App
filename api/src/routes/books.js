@@ -3,6 +3,8 @@ const router = express.Router();
 
 const db = require("../db");
 
+const { validateToken } = require("../middleware/validateToken");
+
 // GET /books  -> ia toate cartile din Firestore
 router.get('/', async (req, res) => {
   try {
@@ -21,7 +23,7 @@ router.get('/', async (req, res) => {
 
 // GET /books/deleted -> lista cartilor sterse 
 // -> cartile sterse se vor muta din colectia books in colectia deleted_books
-router.get("/deleted", async (req, res) => {
+router.get("/deleted", validateToken, async (req, res) => {
   try {
     const snapshot = await db.collection("deleted_books").orderBy("deletedAt", "desc").get();
 
@@ -52,7 +54,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST /books
-router.post("/", async (req, res) => {
+router.post("/", validateToken, async (req, res) => {
   try {
     // datele pentru noua carte intrudusa de utilizator din frontend
     const { title, author, year, pages } = req.body; 
@@ -62,10 +64,13 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "EROARE! Unul dintre campuri nu a fost completat!" });
     }
 
+    const userId = req.user.userId;
+
     // salvarea cartii introduse in bd 
     const docRef = await db.collection("books").add({
       title, author, year, pages,
       createdAt: new Date(),
+      createdBy: userId,
     });
 
     const snap = await docRef.get();
@@ -77,7 +82,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT /books/:id
-router.put("/:id", async (req, res) => {
+router.put("/:id", validateToken, async (req, res) => {
   try {
     const { title, author, year, pages } = req.body;
 
@@ -105,7 +110,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE /books/:id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", validateToken, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -122,6 +127,7 @@ router.delete("/:id", async (req, res) => {
     await db.collection("deleted_books").add({
       ...bookData,
       deletedAt: new Date(),
+      deletedBy: req.user.userId,
     });
 
     await bookRef.delete();
