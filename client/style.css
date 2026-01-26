@@ -188,6 +188,28 @@ th {
 }
 
 /* =========================
+   stergere carte
+   ========================= */
+#deletePanel {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  max-width: 420px;
+}
+
+#deleteBookSelect {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  display: grid;
+  gap: 10px;
+}
+
+#deletePanel button {
+  margin-top: 10px;   
+}
+
+/* =========================
    RESPONSIVE
    ========================= */
 @media (min-width: 700px) {

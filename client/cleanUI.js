@@ -24,7 +24,7 @@ export function showDisplay(el, display = "grid") {
 
 export function setView(mode, refs) {
   const {
-    table, bookForm, editPanel, saveEditBtn, statusEl, submitAddBtn, cancelBookBtn,
+    table, bookForm, editPanel, saveEditBtn, statusEl, submitAddBtn, cancelBookBtn, deletePanel, deletedBooksTable,
   } = refs;
 
   // ascund tot
@@ -33,6 +33,9 @@ export function setView(mode, refs) {
   hide(saveEditBtn);
   hide(bookForm);
   hideDisplay(bookForm);
+  hide(deletePanel);
+  hide(deletedBooksTable);
+
 
   if (statusEl) 
     statusEl.textContent = "";
@@ -43,7 +46,10 @@ export function setView(mode, refs) {
   if (cancelBookBtn) 
     cancelBookBtn.classList.remove("hidden");
 
-  if (mode === "list") return;
+  if (mode === "list") {
+    show(table);
+    return;
+  }
 
   if (mode === "add") {
     if (bookForm) {
@@ -63,6 +69,16 @@ export function setView(mode, refs) {
     if (cancelBookBtn) 
       cancelBookBtn.classList.add("hidden");
 
+    return;
+  }
+
+  if (mode === "delete") {
+        show(deletePanel);
+        return;
+  }
+
+  if (mode === "deleted") {
+    show(deletedBooksTable);
     return;
   }
 }

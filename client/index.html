@@ -9,7 +9,6 @@
 </head>
 <body>
 
-
 <!-- pagina de autentificare -->
 <div id="auth-section">
   <h2>Login</h2>
@@ -41,6 +40,8 @@
     <button id="loadBooksBtn">Afișează cărțile</button>
     <button id="addBookBtn">Adaugă carte</button>
     <button id="editBookBtn">Editează carte</button>
+    <button id="deleteBookBtn">Șterge carte</button>
+    <button id="loadDeletedBooksBtn">Afișează cărțile șterse</button>
 
     <!-- modificare carte -->
     <div id="editPanel" class="hidden">
@@ -48,6 +49,27 @@
         <option value="">-- Alege o carte din cele existe --</option>
       </select>
     </div>
+
+    <!-- stergere carte -->
+    <div id="deletePanel" class="hidden">
+      <select id="deleteBookSelect">
+        <option value="">-- Alege o carte de sters --</option>
+      </select>
+      <button id="confirmDeleteBtn" class="hidden" type="button">Sterge cartea selectata</button>
+    </div>
+
+    <!-- afisare carti sterse -->
+    <table id="deletedBooksTable" class="hidden">
+      <thead>
+        <tr>
+          <th>Titlu</th>
+          <th>Autor</th>
+          <th>An apariție</th>
+          <th>Pagini</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
     <!-- formular pentru adaugarea unei carti noi -->
     <form id="bookForm" class="hidden">

@@ -19,6 +19,23 @@ router.get('/', async (req, res) => {
   }
 });
 
+// GET /books/deleted -> lista cartilor sterse 
+// -> cartile sterse se vor muta din colectia books in colectia deleted_books
+router.get("/deleted", async (req, res) => {
+  try {
+    const snapshot = await db.collection("deleted_books").orderBy("deletedAt", "desc").get();
+
+    const books = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return res.json(books);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
 // GET /books/:id
 router.get("/:id", async (req, res) => {
   try {
@@ -88,11 +105,34 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE /books/:id
-router.delete('/:id', (req, res) => {
-  res.json({
-    message: 'Book deleted',
-    id: req.params.id
-  });
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const bookRef = db.collection("books").doc(id);
+    const snap = await bookRef.get();
+
+    if (!snap.exists) {
+      return res.status(404).json({ error: "Cartea nu exista." });
+    }
+
+    const bookData = snap.data();
+
+    // cartea stearsa se muta in colectia deleted_books
+    await db.collection("deleted_books").add({
+      ...bookData,
+      deletedAt: new Date(),
+    });
+
+    await bookRef.delete();
+
+    return res.json({
+      message: "Cartea a fost stearsa cu succes.",
+      book: { id, ...bookData },
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;
