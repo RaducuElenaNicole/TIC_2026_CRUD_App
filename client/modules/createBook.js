@@ -48,7 +48,7 @@ export function initCreateBook(API_BASE, ui, uiRefs) {
 
   if (bookForm) {
     bookForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+      e.preventDefault(); // vreau sa trimit requestul manual cu fetch 
 
       if (statusEl) 
         statusEl.textContent = "";
@@ -63,7 +63,7 @@ export function initCreateBook(API_BASE, ui, uiRefs) {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-            statusEl.textContent = "Nu esti logat. Fa login ca sa poti adauga o carte.";
+            statusEl.textContent = "Nu esti logat. Trebuie sa te loghezi petru a putea adauga o carte.";
             return;
         }
 

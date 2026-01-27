@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 
 // Middleware: Enable CORS and JSON parsing
 app.use(cors());
-app.use(express.json());
+app.use(express.json());// permite citirea JSON din req.body
 
 const CLIENT_DIR = path.resolve(__dirname, "../../client");
 app.use(express.static(CLIENT_DIR));
@@ -24,13 +24,7 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(CLIENT_DIR, "index.html"));
 });
 
-/*
-app.use(express.static(path.join(__dirname, '..', '..', 'client')));
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "..", "client", "index.html"));
-});
-*/
-
+// ruta test API 
 app.get('/api', (req, res) => {
   res.json({ message: 'API is running' });
 });

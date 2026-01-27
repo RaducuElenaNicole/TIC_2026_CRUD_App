@@ -5,7 +5,8 @@ const db = require("../db");
 
 const { validateToken } = require("../middleware/validateToken");
 
-// GET /books  -> ia toate cartile din Firestore
+// GET /books  -> ia toate cartile din Firestore - ruta pt afisarea cartilor 
+// ruta publica, neprotejata
 router.get('/', async (req, res) => {
   try {
     const snapshot = await db.collection('books').get();
@@ -21,7 +22,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET /books/deleted -> lista cartilor sterse 
+// GET /books/deleted -> ruta pentru afisarea cartilor sterse 
 // -> cartile sterse se vor muta din colectia books in colectia deleted_books
 router.get("/deleted", validateToken, async (req, res) => {
   try {
@@ -39,6 +40,7 @@ router.get("/deleted", validateToken, async (req, res) => {
 });
 
 // GET /books/:id
+// ruta publica 
 router.get("/:id", async (req, res) => {
   try {
     const ref = db.collection("books").doc(req.params.id);
@@ -54,6 +56,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST /books
+// ruta pt adaugarea unei carti 
 router.post("/", validateToken, async (req, res) => {
   try {
     // datele pentru noua carte intrudusa de utilizator din frontend
@@ -67,12 +70,14 @@ router.post("/", validateToken, async (req, res) => {
     const userId = req.user.userId;
 
     // salvarea cartii introduse in bd 
+    // docRef -> referinta catre documentul creat in Firestore 
     const docRef = await db.collection("books").add({
       title, author, year, pages,
       createdAt: new Date(),
       createdBy: userId,
     });
 
+    // citesc documentul; snap = DocumentSnapshot
     const snap = await docRef.get();
 
     return res.status(201).json({ id: docRef.id, ...snap.data() });
@@ -90,6 +95,7 @@ router.put("/:id", validateToken, async (req, res) => {
       return res.status(400).json({ error: "EROARE! Unul dintre campuri nu a fost completat!" });
     }
 
+    //referinta catre documentul din firestore care trebuie sa fie modificat 
     const ref = db.collection("books").doc(req.params.id);
     const snap = await ref.get();
 
@@ -110,6 +116,7 @@ router.put("/:id", validateToken, async (req, res) => {
 });
 
 // DELETE /books/:id
+// ruta pentru stergerea si mutarea cartii 
 router.delete("/:id", validateToken, async (req, res) => {
   try {
     const { id } = req.params;
@@ -121,6 +128,7 @@ router.delete("/:id", validateToken, async (req, res) => {
       return res.status(404).json({ error: "Cartea nu exista." });
     }
 
+    // pastrez datele cartii care urmeaza sa fie stearsa 
     const bookData = snap.data();
 
     // cartea stearsa se muta in colectia deleted_books

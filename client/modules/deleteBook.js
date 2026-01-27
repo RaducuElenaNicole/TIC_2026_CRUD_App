@@ -29,8 +29,8 @@ export function initDeleteBook(API_BASE, ui, uiRefs) {
 
       books.forEach((b) => {
         const opt = document.createElement("option");
-        opt.value = b.id;
-        opt.textContent = b.title;
+        opt.value = b.id;// id-ul cartii selectate de user care va fi trimis la delete 
+        opt.textContent = b.title; // userul in dropdown vede titlul cartii 
         deleteBookSelect.appendChild(opt);
       });
 

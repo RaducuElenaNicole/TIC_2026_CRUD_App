@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET, JWT_EXPIRES_IN } = require('./config');
 
 async function hashPassword(password) {
+  // salt este un text random generat special pentru hashing 
+  // 10 = salt rounds => cu cat este numarul mai mare, cu atat hashingul este mai lent 
   const salt = await bcrypt.genSalt(10);
   return bcrypt.hash(password, salt);
 }
@@ -11,7 +13,7 @@ async function comparePassword(password, hashedPassword) {
   return await bcrypt.compare(password, hashedPassword);
 }
 
-function generateToken(user) {
+function generateToken(user) { // generarea tokenului JWT
   const userData = {
     userId: user.id,
     email: user.email
@@ -28,9 +30,4 @@ function verifyToken(token) {
   }
 }
 
-module.exports = {
-  hashPassword,
-  comparePassword,
-  generateToken,
-  verifyToken
-};
+module.exports = { hashPassword, comparePassword, generateToken, verifyToken };

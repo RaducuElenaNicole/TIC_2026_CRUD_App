@@ -15,7 +15,7 @@ router.post("/register", registerValidation, handleValidation, async (req, res) 
     // verific daca emailul exista deja 
     const existing = await db.collection("users").where("email", "==", email).limit(1).get();
     if (!existing.empty) {
-      return res.status(409).json({ error: "Email already exists" });
+      return res.status(409).json({ error: "Exista cel putin un utilizator inregistrat cu acest email!" });
     }
 
     // hash la parola
@@ -23,12 +23,7 @@ router.post("/register", registerValidation, handleValidation, async (req, res) 
 
     // salvez user in firestore
     const userRef = await db.collection("users").add({
-      firstName,
-      lastName,
-      email,
-      passwordHash,
-      createdAt: new Date(),
-    });
+      firstName, lastName, email, passwordHash, createdAt: new Date(), });
 
     // generez token
     const user = { id: userRef.id, email };
@@ -49,13 +44,14 @@ router.post("/login", loginValidation, handleValidation, async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // caut user by email
     const snap = await db.collection("users").where("email", "==", email).limit(1).get();
     if (snap.empty) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
+    // primul document gasit din Firestore
     const doc = snap.docs[0];
+    // datele userului
     const userData = doc.data();
 
     // verific parola 
@@ -64,7 +60,7 @@ router.post("/login", loginValidation, handleValidation, async (req, res) => {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    // generez token
+    // generez JWT
     const user = { id: doc.id, email: userData.email };
     const token = generateToken(user);
 

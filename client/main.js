@@ -22,8 +22,10 @@ const deletedBooksTable = document.getElementById("deletedBooksTable");
 
 const submitAddBtn = bookForm ? bookForm.querySelector('button[type="submit"]') : null;
 
+// obiect cu toate functiile UI
 const ui = { hide, show, setView, hideDisplay, showDisplay };
 
+// obiect care contine toate elementele/referintele din pagina librariei 
 const uiRefs = {
   table, bookForm, editPanel, saveEditBtn, statusEl, submitAddBtn, cancelBookBtn, deletePanel, deletedBooksTable};
 

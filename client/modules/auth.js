@@ -38,11 +38,13 @@ export function initAuth(API_BASE) {
     if (body) body.innerHTML = "";
   }
 
+  // salvare token + email => dupa refresh, userul e logat
   function saveAuth(token, email) {
     localStorage.setItem("token", token);
     localStorage.setItem("email", email);
   }
 
+  // la logout se sterge tokenul si email
   function clearAuth() {
     localStorage.removeItem("token");
     localStorage.removeItem("email");
